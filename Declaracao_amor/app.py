@@ -5,7 +5,6 @@ import streamlit.components.v1 as components
 import os
 
 # 1. CONFIGURAÇÃO DE DESIGN (UI/UX PREMIUM)
-# Disfarce técnico para a aba do navegador
 st.set_page_config(page_title="Relatório Técnico - Sistema de Segurança", page_icon="📊", layout="wide")
 
 st.markdown("""
@@ -65,15 +64,21 @@ st.markdown("""
         padding: 5px;
         border: 1px solid white;
         width: 100%;
+        margin-top: -10px;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# 2. MENU SUPERIOR
+# 2. MÚSICA (Logica para encontrar o arquivo no servidor)
+music_container = st.container()
+current_dir = os.path.dirname(__file__)
+music_path = os.path.join(current_dir, "musica.mp3")
+
+# 3. MENU SUPERIOR
 selected = option_menu(
     menu_title=None,
     options=["Início", "Nossas Fotos", "Quiz", "Desafio"],
-    icons=["house-heart-fill", "images", "patch-question-fill", "gift-fill"],
+    icons=["house-heart-fill", "images", "chat-right-quote-fill", "gift-fill"],
     orientation="horizontal",
     styles={
         "container": {"padding": "5!important", "background-color": "rgba(255,255,255,0.5)"},
@@ -81,27 +86,25 @@ selected = option_menu(
     }
 )
 
-# 3. CONTEÚDO
+# 4. CONTEÚDO
 if selected == "Início":
     rain(emoji="🌸", font_size=30, falling_speed=3, animation_length="infinite")
-    st.markdown("<h1>Para o Homem da minha vida 💖</h1>", unsafe_allow_html=True)
-    
+    st.markdown("<h1>Para o Homem da minha vida</h1>", unsafe_allow_html=True)
     with st.container():
-        st.markdown("<div class='glass-card'>", unsafe_allow_html=True)
-        st.markdown("<h2 style='color: #d63384; font-family: Dancing Script; font-size: 2.5rem; margin-top:0;'>Oi, meu amor! 💌</h2>", unsafe_allow_html=True)
-        st.write("Dei um monte de chicotada na IA pra poder demonstrar uma fração da nossa história. Te amo muito meu amor, olha aí meu projetinho.")
-        
-        # GIF Centralizado
-        st.image("https://media.tenor.com/y2be8_vO78IAAAAi/cute-ice-bear-love-puffy.gif", use_container_width=True)
-        
-        # Player de Música (Melhorado para carregar do GitHub)
-        if os.path.exists("musica.mp3"):
-            with open("musica.mp3", "rb") as f:
-                st.audio(f.read(), format="audio/mp3", loop=True)
+        st.markdown("""
+            <div class="glass-card">
+                <h2 style="color: #d63384; font-family: 'Dancing Script'; font-size: 2.5rem; margin-top:0;">Oi, meu amor! 💌</h2>
+                <p>Dei um monte de chicotada na IA pra poder demonstrar uma fração da nossa historia, Te amo muito meu amor, olha aí meu projetinho</p>
+                <p>❤️</p>
+                <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" style="width: 100%; border-radius: 25px; border: 4px solid white; margin: 20px 0;">
+            </div>
+        """, unsafe_allow_html=True)
+
+        if os.path.exists(music_path):
+            with open(music_path, "rb") as f:
+                music_container.audio(f.read(), format="audio/mp3", loop=True)
         else:
-            st.warning("🎵 Arquivo 'musica.mp3' não encontrado. Verifique se ele está no GitHub!")
-            
-        st.markdown("</div>", unsafe_allow_html=True)
+            music_container.info("🎵 Aguardando arquivo de música...")
 
 elif selected == "Nossas Fotos":
     rain(emoji="🐱🐒", font_size=30, falling_speed=4, animation_length=2)
@@ -112,8 +115,9 @@ elif selected == "Nossas Fotos":
     
     for i, foto in enumerate(fotos):
         with [col1, col2, col3][i % 3]:
-            if os.path.exists(foto):
-                st.image(foto, use_container_width=True)
+            full_foto_path = os.path.join(current_dir, foto)
+            if os.path.exists(full_foto_path):
+                st.image(full_foto_path, use_container_width=True)
             else:
                 st.info(f"Falta a imagem {foto}")
 
@@ -162,4 +166,5 @@ elif selected == "Desafio":
         """, height=350
     )
 
+# ASSINATURA NO RODAPÉ
 st.markdown("<div class='rodape'>Feito com ❤️ por Sua tintinha</div>", unsafe_allow_html=True)
