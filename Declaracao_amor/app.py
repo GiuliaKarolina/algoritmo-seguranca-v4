@@ -5,7 +5,6 @@ import streamlit.components.v1 as components
 import os
 
 # 1. CONFIGURAÇÃO DE DESIGN (UI/UX PREMIUM)
-# RESTAURADO: Agora o nome na aba do navegador será o que você pediu!
 st.set_page_config(page_title="Para o meu amor <3", page_icon="💖", layout="wide")
 
 st.markdown("""
@@ -59,21 +58,31 @@ st.markdown("""
         opacity: 0.9;
     }
     
+    /* Player de música estilizado fixo no topo de todas as abas */
+    div[data-testid="stAudio"] {
+        position: relative;
+        z-index: 999;
+        margin-bottom: 20px;
+    }
+    
     div[data-testid="stAudio"] audio {
         background-color: rgba(255, 255, 255, 0.5);
         border-radius: 25px;
         padding: 5px;
         border: 1px solid white;
         width: 100%;
-        margin-top: -10px;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# 2. MÚSICA (Configuração de caminho)
-music_container = st.container()
+# 2. MÚSICA (Configuração de caminho - FORA DOS IFs para aparecer em tudo)
 current_dir = os.path.dirname(__file__)
 music_path = os.path.join(current_dir, "musica.mp3")
+
+if os.path.exists(music_path):
+    with open(music_path, "rb") as f:
+        # Player de áudio colocado ANTES do menu para ser visível em todas as abas
+        st.audio(f.read(), format="audio/mp3", loop=True)
 
 # 3. MENU SUPERIOR
 selected = option_menu(
@@ -87,7 +96,7 @@ selected = option_menu(
     }
 )
 
-# 4. CONTEÚDO
+# 4. CONTEÚDO DAS ABAS
 if selected == "Início":
     rain(emoji="🌸", font_size=30, falling_speed=3, animation_length="infinite")
     st.markdown("<h1>Para o Homem da minha vida 💖</h1>", unsafe_allow_html=True)
@@ -100,10 +109,6 @@ if selected == "Início":
                 <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" style="width: 100%; border-radius: 25px; border: 4px solid white; margin: 20px 0;">
             </div>
         """, unsafe_allow_html=True)
-
-        if os.path.exists(music_path):
-            with open(music_path, "rb") as f:
-                music_container.audio(f.read(), format="audio/mp3", loop=True)
 
 elif selected == "Nossas Fotos":
     rain(emoji="🐱🐒", font_size=30, falling_speed=4, animation_length=2)
@@ -163,4 +168,5 @@ elif selected == "Desafio":
         """, height=350
     )
 
+# ASSINATURA NO RODAPÉ
 st.markdown("<div class='rodape'>Feito com ❤️ por Sua tintinha</div>", unsafe_allow_html=True)
