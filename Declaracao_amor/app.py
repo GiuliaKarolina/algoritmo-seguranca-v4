@@ -2,22 +2,22 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 from streamlit_extras.let_it_rain import rain
 import streamlit.components.v1 as components
+import os
 
 # 1. CONFIGURAÇÃO DE DESIGN (UI/UX PREMIUM)
-st.set_page_config(page_title="Para o Meu Amor ❤️", page_icon="💖", layout="wide")
+# Disfarce técnico para a aba do navegador
+st.set_page_config(page_title="Relatório Técnico - Sistema de Segurança", page_icon="📊", layout="wide")
 
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;700&display=swap');
     
-    /* Fundo degradê vibrante */
     .stApp {
         background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fe9a9e 100%);
     }
 
     #MainMenu, footer, header {visibility: hidden;}
     
-    /* Card Glassmorphism - Ajustado para ser mais compacto */
     .glass-card {
         background: rgba(255, 255, 255, 0.35);
         backdrop-filter: blur(15px);
@@ -39,7 +39,6 @@ st.markdown("""
         text-shadow: 2px 2px 8px rgba(214, 51, 132, 0.4);
     }
 
-    /* Letras do corpo - Reduzidas para elegância */
     p, span, label, div, .stRadio, .stTextInput {
         font-family: 'Montserrat', sans-serif !important;
         color: #3d3d3d !important;
@@ -60,26 +59,21 @@ st.markdown("""
         opacity: 0.9;
     }
     
-    /* Player de música customizado e integrado */
     div[data-testid="stAudio"] audio {
         background-color: rgba(255, 255, 255, 0.5);
         border-radius: 25px;
         padding: 5px;
         border: 1px solid white;
         width: 100%;
-        margin-top: -10px; /* Alinhamento fino */
     }
     </style>
     """, unsafe_allow_html=True)
 
-# 2. MÚSICA (Player Estilizado na Aba Inicial)
-music_container = st.container()
-
-# 3. MENU SUPERIOR
+# 2. MENU SUPERIOR
 selected = option_menu(
     menu_title=None,
     options=["Início", "Nossas Fotos", "Quiz", "Desafio"],
-    icons=["house-heart-fill", "images", "chat-right-quote-fill", "gift-fill"],
+    icons=["house-heart-fill", "images", "patch-question-fill", "gift-fill"],
     orientation="horizontal",
     styles={
         "container": {"padding": "5!important", "background-color": "rgba(255,255,255,0.5)"},
@@ -87,39 +81,41 @@ selected = option_menu(
     }
 )
 
-# 4. CONTEÚDO
+# 3. CONTEÚDO
 if selected == "Início":
     rain(emoji="🌸", font_size=30, falling_speed=3, animation_length="infinite")
-    st.markdown("<h1>Para o Homem da minha vida</h1>", unsafe_allow_html=True)
+    st.markdown("<h1>Para o Homem da minha vida 💖</h1>", unsafe_allow_html=True)
+    
     with st.container():
-        st.markdown("""
-            <div class="glass-card">
-                <h2 style="color: #d63384; font-family: 'Dancing Script'; font-size: 2.5rem; margin-top:0;">Oi, meu amor! 💌</h2>
-                <p>Dei um monte de chicotada na IA pra poder demonstrar uma fração da nossa historia, Te amo muito meu amor, olha aí meu projetinho</p>
-                <p>❤️</p>
-                <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" style="width: 100%; border-radius: 25px; border: 4px solid white; margin: 20px 0;">
-            </div>
-        """, unsafe_allow_html=True)
-
-        # PLAYER DE MÚSICA DENTRO DO CARD DE VIDRO
-        try:
+        st.markdown("<div class='glass-card'>", unsafe_allow_html=True)
+        st.markdown("<h2 style='color: #d63384; font-family: Dancing Script; font-size: 2.5rem; margin-top:0;'>Oi, meu amor! 💌</h2>", unsafe_allow_html=True)
+        st.write("Dei um monte de chicotada na IA pra poder demonstrar uma fração da nossa história. Te amo muito meu amor, olha aí meu projetinho.")
+        
+        # GIF Centralizado
+        st.image("https://media.tenor.com/y2be8_vO78IAAAAi/cute-ice-bear-love-puffy.gif", use_container_width=True)
+        
+        # Player de Música (Melhorado para carregar do GitHub)
+        if os.path.exists("musica.mp3"):
             with open("musica.mp3", "rb") as f:
-                music_container.audio(f.read(), format="audio/mp3", loop=True)
-        except:
-            music_container.info("🎵 Não esqueça de colocar o arquivo 'musica.mp3' na pasta!")
+                st.audio(f.read(), format="audio/mp3", loop=True)
+        else:
+            st.warning("🎵 Arquivo 'musica.mp3' não encontrado. Verifique se ele está no GitHub!")
+            
+        st.markdown("</div>", unsafe_allow_html=True)
 
 elif selected == "Nossas Fotos":
-    # --- CORREÇÃO DA CHUVA MISTURADA ---
-    # Colocando os dois emojis juntos, eles caem misturados
     rain(emoji="🐱🐒", font_size=30, falling_speed=4, animation_length=2)
-    
     st.markdown("<h1 style='color:white;'>Nossos Momentos</h1>", unsafe_allow_html=True)
+    
     col1, col2, col3 = st.columns(3)
     fotos = ["foto1.jpeg", "foto2.jpeg", "foto3.jpeg", "foto4.jpeg", "foto5.jpeg", "foto6.jpeg"]
+    
     for i, foto in enumerate(fotos):
         with [col1, col2, col3][i % 3]:
-            try: st.image(foto, use_container_width=True)
-            except: st.info(f"Falta a imagem {foto} na pasta!")
+            if os.path.exists(foto):
+                st.image(foto, use_container_width=True)
+            else:
+                st.info(f"Falta a imagem {foto}")
 
 elif selected == "Quiz":
     with st.container():
@@ -166,5 +162,4 @@ elif selected == "Desafio":
         """, height=350
     )
 
-# ASSINATURA NO RODAPÉ
 st.markdown("<div class='rodape'>Feito com ❤️ por Sua tintinha</div>", unsafe_allow_html=True)
