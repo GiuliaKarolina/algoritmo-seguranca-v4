@@ -5,7 +5,8 @@ import streamlit.components.v1 as components
 import os
 
 # 1. CONFIGURAÇÃO DE DESIGN (UI/UX PREMIUM)
-st.set_page_config(page_title="Relatório Técnico - Sistema de Segurança", page_icon="📊", layout="wide")
+# RESTAURADO: Agora o nome na aba do navegador será o que você pediu!
+st.set_page_config(page_title="Para o meu amor <3", page_icon="💖", layout="wide")
 
 st.markdown("""
     <style>
@@ -69,7 +70,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 2. MÚSICA (Logica para encontrar o arquivo no servidor)
+# 2. MÚSICA (Configuração de caminho)
 music_container = st.container()
 current_dir = os.path.dirname(__file__)
 music_path = os.path.join(current_dir, "musica.mp3")
@@ -78,7 +79,7 @@ music_path = os.path.join(current_dir, "musica.mp3")
 selected = option_menu(
     menu_title=None,
     options=["Início", "Nossas Fotos", "Quiz", "Desafio"],
-    icons=["house-heart-fill", "images", "chat-right-quote-fill", "gift-fill"],
+    icons=["house-heart-fill", "images", "patch-question-fill", "gift-fill"],
     orientation="horizontal",
     styles={
         "container": {"padding": "5!important", "background-color": "rgba(255,255,255,0.5)"},
@@ -89,7 +90,7 @@ selected = option_menu(
 # 4. CONTEÚDO
 if selected == "Início":
     rain(emoji="🌸", font_size=30, falling_speed=3, animation_length="infinite")
-    st.markdown("<h1>Para o Homem da minha vida</h1>", unsafe_allow_html=True)
+    st.markdown("<h1>Para o Homem da minha vida 💖</h1>", unsafe_allow_html=True)
     with st.container():
         st.markdown("""
             <div class="glass-card">
@@ -103,8 +104,6 @@ if selected == "Início":
         if os.path.exists(music_path):
             with open(music_path, "rb") as f:
                 music_container.audio(f.read(), format="audio/mp3", loop=True)
-        else:
-            music_container.info("🎵 Aguardando arquivo de música...")
 
 elif selected == "Nossas Fotos":
     rain(emoji="🐱🐒", font_size=30, falling_speed=4, animation_length=2)
@@ -118,8 +117,6 @@ elif selected == "Nossas Fotos":
             full_foto_path = os.path.join(current_dir, foto)
             if os.path.exists(full_foto_path):
                 st.image(full_foto_path, use_container_width=True)
-            else:
-                st.info(f"Falta a imagem {foto}")
 
 elif selected == "Quiz":
     with st.container():
@@ -166,5 +163,4 @@ elif selected == "Desafio":
         """, height=350
     )
 
-# ASSINATURA NO RODAPÉ
 st.markdown("<div class='rodape'>Feito com ❤️ por Sua tintinha</div>", unsafe_allow_html=True)
