@@ -133,7 +133,7 @@ elif selected == "Quiz":
             "Como você me ama 💕", "Você saber jogar de tudo e ser super habilidoso 🎮",
             "Sua nerdice 🤓", "✅ Todas as alternativas estão corretas!"
         ], key="q1")
-        p2 = st.text_input("Qual foi o dia que começamos a nos falar? (Dica: d/m/aaaa)", key="q2")
+        p2 = st.text_input("Qual foi o dia que começamos a nos falar? (Dica: dd/mm/aaaa)", key="q2")
         if st.button("Conferir Resultado"):
             if p1 == "✅ Todas as alternativas estão corretas!" and (p2 == "09/04/2025" or p2 == "9/4/2025"):
                 st.balloons(); st.success("Acertou tudo, meu amor! ❤️")
